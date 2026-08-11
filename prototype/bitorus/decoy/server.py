@@ -82,6 +82,15 @@ class Session:
     client_name: str | None = None
     client_version: str | None = None
     client_capabilities: dict = field(default_factory=dict)
+    transport: dict = field(default_factory=dict)
+    """Transport-level metadata (HTTP headers, and similar).
+
+    Held separately from client_capabilities, which feeds the scaffold
+    fingerprint. Keeping them apart is deliberate: transport details vary
+    with deployment and proxying, and letting them reach the fingerprint
+    would break cross-node linkage the same way outcome-dependent events
+    did.
+    """
     events: list[Event] = field(default_factory=list)
     depth: Depth = Depth.CONNECT
     tools_called: list[str] = field(default_factory=list)

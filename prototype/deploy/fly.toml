@@ -1,0 +1,33 @@
+# One decoy image, many regions -- the deployment analogue of
+# Fleet.deploy(REGIONS). Each region is assigned a different injection
+# encoding via NODE_ID, which is what makes the susceptibility matrix
+# computable across the fleet.
+#
+#   fly apps create <neutral-name>
+#   fly deploy -c deploy/fly.toml
+#   fly scale count 6 --region iad,lhr,syd,gru,jnb,sjc
+#
+# BEFORE DEPLOYING: read prototype/DEPLOYMENT.md. In particular this app
+# needs default-deny egress and must live in an organisation that holds
+# nothing else.
+
+app = "CHANGEME-neutral-name"
+primary_region = "iad"
+
+[build]
+  dockerfile = "../Dockerfile"
+
+[env]
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false   # a decoy that sleeps misses the traffic
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[http_service.checks]]
+  path = "/healthz"
+  interval = "30s"
+  timeout = "5s"

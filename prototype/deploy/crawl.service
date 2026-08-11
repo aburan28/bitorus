@@ -1,0 +1,31 @@
+# systemd unit for the ecosystem monitor. Paired with crawl.timer.
+#
+# The monitor is passive measurement of third-party endpoints. It holds no
+# credentials and needs no privileges.
+
+[Unit]
+Description=BiTorus MCP ecosystem monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=bitorus
+WorkingDirectory=/opt/bitorus/prototype
+ExecStart=/usr/bin/python3 -m bitorus.ecosystem.crawl \
+  --targets /etc/bitorus/targets.txt \
+  --opt-out /etc/bitorus/opt-out.txt \
+  --store /var/lib/bitorus/snapshots \
+  --contact abuse@CHANGEME \
+  --interval 21600
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/bitorus
+CapabilityBoundingSet=
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target
