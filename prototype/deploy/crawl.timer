@@ -1,0 +1,14 @@
+# Every six hours, with jitter so a fleet of collectors does not
+# synchronise onto the same minute against the same hosts.
+
+[Unit]
+Description=Run the BiTorus ecosystem monitor periodically
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=6h
+RandomizedDelaySec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

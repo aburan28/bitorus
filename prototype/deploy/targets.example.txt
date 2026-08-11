@@ -1,0 +1,12 @@
+# MCP ecosystem monitor targets, one per line. `#` comments allowed.
+#
+# SOURCING: prefer servers that advertised themselves in a public registry
+# or directory. A listed server invited discovery; an unlisted endpoint
+# found by scanning did not, and that distinction is both legally and
+# reputationally material.
+#
+# Validate the list before the first real pass:
+#   python3 -m bitorus.ecosystem.crawl --targets targets.txt --store ./data --dry-run
+
+# https://mcp.example.com/sse
+# https://another.example.org/mcp
